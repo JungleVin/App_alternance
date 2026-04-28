@@ -216,7 +216,7 @@ export function TrackaApp() {
       {/* Hero */}
       <section className="px-10 pt-8 pb-2">
         <h1 className="text-[42px] leading-[1.05] tracking-[-0.03em] font-bold mb-1.5" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-          Salut Léa — <span className="gradient-text">{activeCount} candidatures en cours</span>,<br />
+          Salut Vin — <span className="gradient-text">{activeCount} candidatures en cours</span>,<br />
           <span className="text-ink2 font-medium">
             {stats.urgent} action{stats.urgent > 1 ? 's' : ''} urgente{stats.urgent > 1 ? 's' : ''} cette semaine.
           </span>
