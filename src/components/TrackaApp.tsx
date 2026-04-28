@@ -177,6 +177,30 @@ export function TrackaApp() {
     setIsNew(true);
   }
 
+  function exportCSV() {
+    const headers = ['Entreprise', 'Poste', 'Lieu', 'Statut', 'Étape', 'Favori', 'Urgent', 'Salaire', 'Contrat', 'Source', 'Note /5', 'Tags', 'Candidaté le', 'Dernière action', 'Prochaine action', 'Contact', 'Rôle contact', 'Email contact', 'Notes'];
+    const rows = apps.map(a => [
+      a.company, a.role, a.location, a.status, a.stepIndex,
+      a.favorite ? 'Oui' : 'Non', a.urgent ? 'Oui' : 'Non',
+      a.salary, a.contract, a.source, a.rating ?? '',
+      a.tags.join(', '),
+      a.appliedAt ?? '', a.lastActionAt ?? '', a.nextActionDue ?? '',
+      a.contact?.name ?? '', a.contact?.role ?? '', a.contact?.email ?? '',
+      (a.notes ?? '').replace(/\n/g, ' '),
+    ]);
+    const csv = [headers, ...rows]
+      .map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';'))
+      .join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tracka-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Export téléchargé', 'linear-gradient(135deg, #12B981, #6FE599)');
+  }
+
   const openApp = apps.find(a => a.id === openId);
   const activeCount = apps.filter(a => !['rejected', 'offer'].includes(a.status)).length;
 
@@ -219,6 +243,13 @@ export function TrackaApp() {
 
         <div className="ml-auto flex items-center gap-2.5">
           <TweaksPanel tweaks={tweaks} onChange={patch => setTweaks(t => ({ ...t, ...patch }))} />
+          <button
+            className="flex items-center gap-2 px-[18px] py-2.5 rounded-full font-semibold text-[13.5px] border border-[var(--line-2)] text-ink2 bg-[rgba(26,22,37,0.04)] transition-all hover:bg-[rgba(26,22,37,0.08)] hover:text-ink"
+            onClick={exportCSV}
+            title="Exporter en Excel/CSV"
+          >
+            <Icon name="download" size={14} /> Exporter
+          </button>
           <button
             className="flex items-center gap-2 px-[18px] py-2.5 rounded-full font-semibold text-[13.5px] text-white transition-all hover:-translate-y-px hover:shadow-[0_12px_28px_-8px_rgba(255,91,142,0.7)]"
             style={{ background: 'linear-gradient(135deg, #FF5B8E 0%, #FFB547 100%)', boxShadow: '0 8px 22px -6px rgba(255,91,142,0.55)' }}
