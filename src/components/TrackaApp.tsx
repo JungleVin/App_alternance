@@ -34,6 +34,28 @@ export function TrackaApp() {
   const [justMovedId, setJustMovedId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ text: string; gradient: string } | null>(null);
   const [confetti, setConfetti] = useState<ConfettiPiece[] | null>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Load persisted data on mount
+  useEffect(() => {
+    try {
+      const savedApps = localStorage.getItem('tracka-apps');
+      if (savedApps) setApps(JSON.parse(savedApps));
+      const savedTweaks = localStorage.getItem('tracka-tweaks');
+      if (savedTweaks) setTweaks(JSON.parse(savedTweaks));
+    } catch {}
+    setDataLoaded(true);
+  }, []);
+
+  // Persist apps whenever they change (after initial load)
+  useEffect(() => {
+    if (dataLoaded) localStorage.setItem('tracka-apps', JSON.stringify(apps));
+  }, [apps, dataLoaded]);
+
+  // Persist tweaks whenever they change (after initial load)
+  useEffect(() => {
+    if (dataLoaded) localStorage.setItem('tracka-tweaks', JSON.stringify(tweaks));
+  }, [tweaks, dataLoaded]);
 
   // Apply tweaks to CSS vars
   useEffect(() => {
@@ -208,7 +230,7 @@ export function TrackaApp() {
             className="w-[38px] h-[38px] rounded-full grid place-items-center font-bold text-[13px] text-white"
             style={{ background: 'linear-gradient(135deg, #7B61FF, #FF5B8E)', boxShadow: '0 1px 2px rgba(26,22,37,0.04), 0 2px 8px rgba(26,22,37,0.04)' }}
           >
-            LA
+            VI
           </div>
         </div>
       </header>
