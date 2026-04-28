@@ -178,14 +178,15 @@ export function TrackaApp() {
   }
 
   function exportCSV() {
-    const headers = ['Entreprise', 'Poste', 'Lieu', 'Statut', 'Étape', 'Favori', 'Urgent', 'Salaire', 'Contrat', 'Source', 'Note /5', 'Tags', 'Candidaté le', 'Dernière action', 'Prochaine action', 'Contact', 'Rôle contact', 'Email contact', 'Notes'];
+    const headers = ['Entreprise', 'Poste', 'Lieu', 'Remote', 'Statut', 'Étape', 'Favori', 'Urgent', 'Salaire', 'Rythme', 'Source', 'Intérêt /5', 'Tags', 'Envoyé le', 'Dernière action', 'Entretien le', 'Prochaine action', 'Échéance', 'Contact', 'Rôle contact', 'Email contact', 'Tél contact', 'Notes'];
     const rows = apps.map(a => [
-      a.company, a.role, a.location, a.status, a.stepIndex,
+      a.company, a.role, a.location, a.remote, a.status, a.stepIndex,
       a.favorite ? 'Oui' : 'Non', a.urgent ? 'Oui' : 'Non',
-      a.salary, a.contract, a.source, a.rating ?? '',
+      a.salary, a.rhythm, a.source, a.interest,
       a.tags.join(', '),
-      a.appliedAt ?? '', a.lastActionAt ?? '', a.nextActionDue ?? '',
-      a.contact?.name ?? '', a.contact?.role ?? '', a.contact?.email ?? '',
+      a.sentAt ?? '', a.lastActionAt ?? '', a.interviewAt ?? '',
+      a.nextAction ?? '', a.nextActionDue ?? '',
+      a.contact?.name ?? '', a.contact?.role ?? '', a.contact?.email ?? '', a.contact?.phone ?? '',
       (a.notes ?? '').replace(/\n/g, ' '),
     ]);
     const csv = [headers, ...rows]
